@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="Login" cloudDestinationProperty="Login" focusable="false" scrollableX="false" scrollableY="true" layout="BoxLayout" boxLayoutAxis="Y" >
+  <component type="ImageViewer" name="ImageViewer" cloudDestinationProperty="ImageViewer" snapToGrid="false" flatten="false" >
+    <custom name="image" type="com.codename1.ui.Image" value="freelancy.png" />
+  </component>
+  <component type="Container" name="Email" cloudDestinationProperty="Email" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="4" >
+    <component type="Label" name="Label" cloudDestinationProperty="Label" text="Email" >
+    </component>
+    <component type="TextField" name="email" cloudBoundProperty="text" cloudDestinationProperty="email" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container1" cloudDestinationProperty="Container1" uiid="Password" focusable="false" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="2" >
+    <component type="Label" name="labepwd" cloudDestinationProperty="Label1" text="Password" >
+    </component>
+    <component type="TextField" name="password" cloudBoundProperty="text" cloudDestinationProperty="TextField" text="" constraint="65536" >
+    </component>
+  </component>
+  <component type="Container" name="conlogin" cloudDestinationProperty="conlogin" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="0" >
+    <component type="Button" name="login" cloudDestinationProperty="Button " text="Login" >
+    </component>
+  </component>
+</component>
