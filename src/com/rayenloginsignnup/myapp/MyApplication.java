@@ -81,12 +81,17 @@ public class MyApplication {
         UIBuilder.registerCustomComponent("ImageViewer", ImageViewer.class);
         UIBuilder uIBuilder = new UIBuilder();
         Container c = uIBuilder.createContainer(theme, "Login");
+        Container c1 = uIBuilder.createContainer(theme, "Signup");
+
+        Form fsignup = (Form) c1;
+
         //Form f = (Form) uIBuilder.findByName("Login", c);
         Form f1 = (Form) c;
         TextField email = (TextField) uIBuilder.findByName("email", c);
 
         TextField password = (TextField) uIBuilder.findByName("password", c);
-        Button btn = (Button) uIBuilder.findByName("login", c);
+        Button loginbtn = (Button) uIBuilder.findByName("login", c);
+        Button signupbtn = (Button) uIBuilder.findByName("signup", c);
 
         Form f2 = new Form("Home", new FlowLayout(CENTER, CENTER));
 
@@ -115,7 +120,7 @@ public class MyApplication {
         f2.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f2.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f2.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
-        
+
         // navvbbar Form 3
         f3.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f2.show());
         f3.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> f3.show());
@@ -127,7 +132,7 @@ public class MyApplication {
         f3.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f3.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f3.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
-        
+
         // NAVIGATION NAVBAR FROM 33
         f33.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f2.show());
         f33.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> f3.show());
@@ -139,7 +144,7 @@ public class MyApplication {
         f33.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f33.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f33.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
-        
+
         // Navigation navbar Form 4 
         f4.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f2.show());
         f4.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> f3.show());
@@ -151,7 +156,7 @@ public class MyApplication {
         f4.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f4.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f4.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
-        
+
         // NAVIFATION FORM 5 
         f5.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f2.show());
         f5.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> f3.show());
@@ -163,7 +168,7 @@ public class MyApplication {
         f5.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f5.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f5.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
-        
+
         // NAVIGATION FORM 6  
         f6.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f2.show());
         f6.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> f3.show());
@@ -175,7 +180,7 @@ public class MyApplication {
         f6.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f6.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f6.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
-        
+
         // NAVIGATION FORM 8
         f8.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f2.show());
         f8.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> f3.show());
@@ -187,7 +192,7 @@ public class MyApplication {
         f8.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f8.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f8.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
-        
+
         // NAVIGATION FORM 10 
         f10.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f2.show());
         f10.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> f3.show());
@@ -199,7 +204,7 @@ public class MyApplication {
         f10.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f10.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f10.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
-        
+
         // NOVIGAATION FORM 11 
         f11.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f2.show());
         f11.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> f3.show());
@@ -211,9 +216,21 @@ public class MyApplication {
         f11.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> f10.show());
         f11.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> f11.show());
         f11.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f1.show());
+
+        /*f1.getToolbar().addCommandToLeftBar("Back",null, (ActionListener) (ActionEvent evt) -> {
+            home.showBack();
+        });*/
         
+        fsignup.getToolbar().addCommandToLeftBar("Back",null, (ActionListener) (ActionEvent evt) -> {
+            f1.showBack();
+        });
         
-        btn.addActionListener(er -> {
+        signupbtn.addActionListener(er -> {
+            System.out.println("signup");
+            fsignup.show();
+        });
+
+        loginbtn.addActionListener(er -> {
             System.out.println(email.getText() + " " + password.getText());
 
             String url = "http://127.0.0.1:8000/user/signinmobile"; // replace with your API URL
@@ -222,12 +239,15 @@ public class MyApplication {
 
             lb.setText("Welcome : " + email.getText());
             f2.show();
-            /*ConnectionRequest request = new ConnectionRequest() {
+            ConnectionRequest request = new ConnectionRequest() {
                 @Override
                 protected void readResponse(InputStream input) throws IOException {
                     JSONParser parser = new JSONParser();
-                    Map<String, Object> response = parser.parseJSON(new InputStreamReader(input));
+                        Map<String, Object> response = parser.parseJSON(new InputStreamReader(input));
                     System.out.println("Response: " + response);
+                    Object successValue = response.get("success");
+                    System.out.println("Success value: " + successValue);
+
                 }
 
                 @Override
@@ -239,7 +259,7 @@ public class MyApplication {
             request.setPost(true);
             request.setRequestBody(requestBody);
             request.setContentType("application/json");
-            NetworkManager.getInstance().addToQueue(request);*/
+            NetworkManager.getInstance().addToQueue(request);
 
  /* String url = "http://127.0.0.1:8000/user/signinmobile";
 
