@@ -1,4 +1,4 @@
-package com.rayenloginsignnup.myapp;
+package com.tefreelancy.myapp;
 
 import com.codename1.components.ImageViewer;
 import static com.codename1.ui.CN.*;
