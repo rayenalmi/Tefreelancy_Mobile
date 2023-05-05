@@ -4,7 +4,7 @@
  */
 package com.tefreelancy.utils;
 
-import com.terfreelancy.enties.Freelancer;
+import com.terfreelancy.entities.Freelancer;
 
 /**
  *
