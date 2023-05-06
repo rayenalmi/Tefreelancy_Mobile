@@ -32,7 +32,9 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.util.UIBuilder;
 import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Freelancer;
+import com.terfreelancy.myapp.gui.GroupsForm;
 import com.terfreelancy.myapp.gui.HomeForm;
+import com.terfreelancy.myapp.gui.ListGroupForm;
 import com.terfreelancy.myapp.gui.LoginForm;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -75,11 +77,13 @@ public class MyApplication {
     public void start() {
         LoginForm loginForm = new LoginForm(theme);
         // Show the login form on the screen
+        Button btnListGroups = new Button("List Groups");
+        btnListGroups.addActionListener(e -> new ListGroupForm(current,theme).show());
+        loginForm.add(btnListGroups);
         loginForm.show();
 
-    }
 
-    
+    }
 
     public void stop() {
         current = getCurrentForm();
