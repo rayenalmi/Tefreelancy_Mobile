@@ -34,6 +34,7 @@ import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Freelancer;
 import com.terfreelancy.myapp.gui.HomeForm;
 import com.terfreelancy.myapp.gui.LoginForm;
+import com.terfreelancy.myapp.gui.OffersForm;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public class MyApplication {
     }
 
     public void start() {
-        LoginForm loginForm = new LoginForm(theme);
+        OffersForm loginForm = new OffersForm(theme);
         // Show the login form on the screen
         loginForm.show();
 
