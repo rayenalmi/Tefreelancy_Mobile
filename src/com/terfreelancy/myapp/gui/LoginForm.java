@@ -62,6 +62,10 @@ public class LoginForm extends Form {
         TextField password = (TextField) uIBuilder.findByName("password", c);
         Button loginbtn = (Button) uIBuilder.findByName("login", c);
         Button signupbtn = (Button) uIBuilder.findByName("signup", c);
+        
+        signupbtn.addActionListener(er -> {
+            new SignupForm(theme).show();
+        });
 
         /*f.getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f.show());
         f.getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> new OffersForm(theme).show());
@@ -76,6 +80,11 @@ public class LoginForm extends Form {
 
         loginbtn.addActionListener(er -> {
             AdminUserFrom adminI = new AdminUserFrom(theme);
+            
+            adminI.getToolbar().addCommandToLeftBar("Back", null, (ActionListener) (ActionEvent evt) -> {
+            this.showBack();
+        });
+            
             System.out.println(email.getText() + " " + password.getText());
             if (email.getText().equals("admin") && password.getText().equals("admin")) {
 
