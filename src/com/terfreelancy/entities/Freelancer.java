@@ -37,6 +37,9 @@ public class Freelancer {
         this.password = password;
         this.photo = photo;
     }
+
+    public Freelancer() {
+    }
     
        public Freelancer(int id, String nom, String prenom, int tel, String email,String photo) {
         this.id = id;

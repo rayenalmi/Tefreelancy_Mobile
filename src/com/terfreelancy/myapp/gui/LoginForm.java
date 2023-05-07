@@ -187,13 +187,19 @@ public class LoginForm extends Form {
 
         });
 
+          
+        
+        
         this.add(c);
 
     }
 
     public static void showLoginForm(Resources theme) {
         LoginForm loginForm = new LoginForm(theme);
+        
         loginForm.show();
+        
+        
     }
 
     public Container designOneUser(Freelancer f, Form fr) {

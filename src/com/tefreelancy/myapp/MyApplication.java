@@ -33,6 +33,7 @@ import com.codename1.ui.util.UIBuilder;
 import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Freelancer;
 import com.terfreelancy.myapp.gui.HomeForm;
+import com.terfreelancy.myapp.gui.ListWorkspacesForm;
 import com.terfreelancy.myapp.gui.LoginForm;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -75,6 +76,13 @@ public class MyApplication {
     public void start() {
         LoginForm loginForm = new LoginForm(theme);
         // Show the login form on the screen
+        Button btnListWorkspaces = new Button("Workspace");
+        String userRole="Recruter";
+        btnListWorkspaces.addActionListener(e-> new ListWorkspacesForm(current,12,userRole).show());
+        
+        loginForm.add(btnListWorkspaces);
+        
+        
         loginForm.show();
 
     }
