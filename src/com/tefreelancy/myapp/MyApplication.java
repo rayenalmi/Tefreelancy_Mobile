@@ -32,8 +32,11 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.util.UIBuilder;
 import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Freelancer;
+import com.terfreelancy.myapp.gui.AddTestForm;
 import com.terfreelancy.myapp.gui.HomeForm;
+import com.terfreelancy.myapp.gui.ListCrud;
 import com.terfreelancy.myapp.gui.LoginForm;
+import com.terfreelancy.myapp.gui.TheTestsForm;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -75,8 +78,16 @@ public class MyApplication {
     public void start() {
         LoginForm loginForm = new LoginForm(theme);
         // Show the login form on the screen
-        loginForm.show();
+        
+        Button BtnListCrud = new Button("ListCrud");
+        BtnListCrud.addActionListener(e-> new ListCrud(current).show());
+        Button BtnListTests = new Button("les tests dispo");
+        BtnListTests.addActionListener(e-> new TheTestsForm(current).show());
+        loginForm.add(BtnListCrud);
+        loginForm.add(BtnListTests);
 
+        loginForm.show();
+        
     }
 
     
