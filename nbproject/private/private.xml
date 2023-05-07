@@ -6,13 +6,12 @@
         <group>
             <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/entities/Question.java</file>
             <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/tefreelancy/services/ServiceTest.java</file>
-            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/tefreelancy/utils/Statics.java</file>
             <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/tefreelancy/myapp/MyApplication.java</file>
-            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/myapp/gui/LoginForm.java</file>
             <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/tefreelancy/utils/SessionManager.java</file>
-            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/entities/Test.java</file>
-            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/myapp/gui/HomeForm.java</file>
-            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/myapp/gui/SignupForm.java</file>
+            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/myapp/gui/ListTestForm.java</file>
+            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/myapp/gui/InTheTestForm.java</file>
+            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/myapp/gui/TheTestsForm.java</file>
+            <file>file:/C:/Users/yassi/OneDrive/Bureau/tefreelancy%20mobile/Tefreelancy_Mobile/src/com/terfreelancy/myapp/gui/ListCrud.java</file>
         </group>
     </open-files>
 </project-private>
