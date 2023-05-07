@@ -71,6 +71,7 @@ public class MyOffersForm extends Form {
                 //Offre o = new Offre(id, (String) jsonObject.get("name"), (String) jsonObject.get("decs"), (String) jsonObject.get("duration"), (String) jsonObject.get("keyword"),salaire , id_recruter);
                 for (int i = 0; i < offreJSON.size(); i++) {
                     Map<String, Object> jsonObject = (Map<String, Object>) offreJSON.get(i);
+                    // cast input json double to int
                     Object idd = jsonObject.get("id");
                     double d = (double) idd;
                     int id = (int) d;
@@ -79,18 +80,25 @@ public class MyOffersForm extends Form {
                     double dsal = (double) salJ;
                     float salaire = (float) dsal;
 
-                    Object idrecJ = jsonObject.get("salaire");
+                    /*Object idrecJ = jsonObject.get("");
                     double idrec = (double) idrecJ;
-                    int id_recruter = (int) idrec;
-
-                    offres.add(new Offre(id, (String) jsonObject.get("name"), (String) jsonObject.get("decs"), (String) jsonObject.get("duration"), (String) jsonObject.get("keyword"), salaire, id_recruter));
+                    int id_recruter = (int) idrec;*/
+                    offres.add(new Offre(id, (String) jsonObject.get("name"), (String) jsonObject.get("decs"), (String) jsonObject.get("duration"), (String) jsonObject.get("keyword"), salaire, f.getId()));
                 }
 
                 for (int i = 0; i < offres.size(); i++) {
                     Container c3 = new Container(new BoxLayout(BoxLayout.X_AXIS));
                     c3.add(new Label(offres.get(i).getNom()));
                     c3.add(new Button("Update"));
-                    c3.add(new Button("Delete"));
+                    Button btnDelete = new Button("Delete");
+                    int id = offres.get(i).getId_offre();
+                    btnDelete.addActionListener(l -> {
+                        deleteOffer(id);
+                        refreshTheme();
+                    });
+                    refreshTheme();
+
+                    c3.add(btnDelete);
 
                     c.add(c3);
                 }
@@ -158,5 +166,34 @@ public class MyOffersForm extends Form {
         });
         c.add(bntcreate);
         this.add(c);
+    }
+
+    public void deleteOffer(int id) {
+        String url = "http://127.0.0.1:8000/start/offer/deleteOffer"; // replace with your API URL
+        String requestBody = "{\"id\": " + id + " }"; // replace with your login credentials as JSON
+        System.out.println(requestBody);
+
+        ConnectionRequest request = new ConnectionRequest() {
+            @Override
+            protected void readResponse(InputStream input) throws IOException {
+                JSONParser parser = new JSONParser();
+                Map<String, Object> response = parser.parseJSON(new InputStreamReader(input));
+                System.out.println("Response: " + response);
+                Object successValue = response.get("succes");
+                System.out.println("Success value: " + successValue);
+
+            }
+
+            @Override
+            protected void handleErrorResponseCode(int code, String message) {
+                System.out.println("Error: " + message);
+            }
+        };
+        request.setUrl(url);
+        request.setPost(true);
+        request.setRequestBody(requestBody);
+        request.setContentType("application/json");
+        NetworkManager.getInstance().addToQueue(request);
+        //fr.refreshTheme();
     }
 }
