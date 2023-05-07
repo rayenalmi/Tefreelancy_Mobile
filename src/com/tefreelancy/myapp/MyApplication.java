@@ -33,6 +33,7 @@ import com.codename1.ui.util.UIBuilder;
 import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Freelancer;
 import com.terfreelancy.myapp.gui.HomeForm;
+import com.terfreelancy.myapp.gui.HomePortfolio;
 import com.terfreelancy.myapp.gui.LoginForm;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -73,8 +74,19 @@ public class MyApplication {
     }
 
     public void start() {
+        
+        //new HomePortfolio().show();
         LoginForm loginForm = new LoginForm(theme);
-        // Show the login form on the screen
+        
+// Show the login form on the screen
+
+
+        Button BtnGoProfile= new Button("Check your Profile");
+        BtnGoProfile.addActionListener(e-> new HomePortfolio(current).show());
+
+
+
+        loginForm.add(BtnGoProfile);
         loginForm.show();
 
     }
