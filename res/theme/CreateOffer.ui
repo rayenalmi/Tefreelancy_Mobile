@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="CreateOffer" cloudDestinationProperty="CreateOffer" layout="BoxLayout" boxLayoutAxis="Y" >
+  <component type="Container" name="Container" cloudDestinationProperty="Container" >
+    <component type="Label" name="Label" cloudDestinationProperty="Label" text="Name" >
+    </component>
+    <component type="TextField" name="name" cloudBoundProperty="text" cloudDestinationProperty="TextField" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container1" cloudDestinationProperty="Container1" >
+    <component type="Label" name="Label1" cloudDestinationProperty="Label1" text="Description" >
+    </component>
+    <component type="TextField" name="desc" cloudBoundProperty="text" cloudDestinationProperty="TextField1" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container2" cloudDestinationProperty="Container2" >
+    <component type="Label" name="Label2" cloudDestinationProperty="Label2" text="Duration" >
+    </component>
+    <component type="TextField" name="duration" cloudBoundProperty="text" cloudDestinationProperty="TextField2" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container3" cloudDestinationProperty="Container3" >
+    <component type="Label" name="Label3" cloudDestinationProperty="Label3" text="Keyworks" >
+    </component>
+    <component type="TextField" name="key" cloudBoundProperty="text" cloudDestinationProperty="key" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container4" cloudDestinationProperty="Container4" >
+    <component type="Label" name="Label4" cloudDestinationProperty="Label4" text="Salary" >
+    </component>
+    <component type="TextField" name="sal" cloudBoundProperty="text" cloudDestinationProperty="TextField4" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container5" cloudDestinationProperty="Container5" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="4" >
+    <component type="Button" name="create" cloudDestinationProperty="Button" text="Create" >
+    </component>
+  </component>
+</component>

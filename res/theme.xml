@@ -28,6 +28,7 @@
     <image name="Check-Box_Press.png" type="multi"  />
     <image name="combo.png" type="multi"  />
     <image name="ComboBox.borderBottom_1.png" type="multi"  />
+    <ui name="CreateOffer" />
     <image name="Dialog.borderBottom_1.png" type="multi"  />
     <image name="Dialog.borderBottomL_1.png" type="multi"  />
     <image name="Dialog.borderBottomR_1.png" type="multi"  />

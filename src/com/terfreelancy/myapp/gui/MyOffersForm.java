@@ -7,11 +7,15 @@ package com.terfreelancy.myapp.gui;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
+import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
+import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.util.Resources;
+import com.codename1.ui.util.UIBuilder;
 import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Freelancer;
 import com.terfreelancy.entities.Offre;
@@ -26,10 +30,17 @@ import java.util.Map;
  *
  * @author ROG
  */
-public class OffersForm extends Form {
+public class MyOffersForm extends Form {
 
-    public OffersForm(Resources theme) {
-        //getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f.show());
+    public MyOffersForm(Resources theme) {
+        ArrayList<Offre> offres = new ArrayList<>();
+
+        SessionManager session = SessionManager.getInstance();
+        Freelancer f = session.getCurrentUser();
+        System.out.println("-------------" + f + " -------------");
+
+        setTitle("Offers");
+
         getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> new OffersForm(theme).show());
         getToolbar().addCommandToLeftSideMenu("My Offers", null, ev -> new MyOffersForm(theme).show());
         getToolbar().addCommandToLeftSideMenu("Candidacy", null, ev -> new CandidacyForm(theme).show());
@@ -39,15 +50,13 @@ public class OffersForm extends Form {
         getToolbar().addCommandToLeftSideMenu("Groups", null, ev -> new GroupsForm(theme).show());
         getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> new WorkspaceForm(theme).show());
         getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> new ProfilForm(theme).show());
-        getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> this.show());
+        getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> new LoginForm(theme).show());
 
-        ArrayList<Offre> offres = new ArrayList<>();
-
-        setTitle("Offers");
         Container c = new Container(new BoxLayout(BoxLayout.Y_AXIS));
 
-        String url = "http://127.0.0.1:8000/start/offer/getoffersmobile";
-
+        String url = "http://127.0.0.1:8000/start/offer/getoffersrecrutermobile";
+        String requestBody = "{\"id\": " + f.getId() + "}"; // replace with your login credentials as JSON
+        System.out.println(requestBody);
         ConnectionRequest request = new ConnectionRequest() {
             @Override
             protected void readResponse(InputStream input) throws IOException {
@@ -70,7 +79,7 @@ public class OffersForm extends Form {
                     double dsal = (double) salJ;
                     float salaire = (float) dsal;
 
-                    Object idrecJ = jsonObject.get("idrec");
+                    Object idrecJ = jsonObject.get("salaire");
                     double idrec = (double) idrecJ;
                     int id_recruter = (int) idrec;
 
@@ -78,7 +87,12 @@ public class OffersForm extends Form {
                 }
 
                 for (int i = 0; i < offres.size(); i++) {
-                    c.add(new Label(offres.get(i).getNom()));
+                    Container c3 = new Container(new BoxLayout(BoxLayout.X_AXIS));
+                    c3.add(new Label(offres.get(i).getNom()));
+                    c3.add(new Button("Update"));
+                    c3.add(new Button("Delete"));
+
+                    c.add(c3);
                 }
                 refreshTheme();
 
@@ -90,11 +104,59 @@ public class OffersForm extends Form {
             }
         };
         request.setUrl(url);
-        request.setPost(false);
+        request.setPost(true);
+        request.setRequestBody(requestBody);
         request.setContentType("application/json");
         NetworkManager.getInstance().addToQueue(request);
 
-        this.add(c);
+        UIBuilder uIBuilder = new UIBuilder();
+        Button bntcreate = new Button("Create Offer");
+        bntcreate.addActionListener(e -> {
+            Container c1 = uIBuilder.createContainer(theme, "CreateOffer");
+            Form co = (Form) c1;
+            co.show();
+            co.getToolbar().addCommandToLeftBar("Back", null, ev -> this.show());
 
+            TextField name = (TextField) uIBuilder.findByName("name", c1);
+            TextField desc = (TextField) uIBuilder.findByName("desc", c1);
+            TextField duration = (TextField) uIBuilder.findByName("duration", c1);
+            TextField key = (TextField) uIBuilder.findByName("key", c1);
+            TextField sal = (TextField) uIBuilder.findByName("sal", c1);
+
+            Button bnt = (Button) uIBuilder.findByName("create", c1);
+
+            bnt.addActionListener(l -> {
+                String url1 = "http://127.0.0.1:8000/start/offer/newmobile";
+
+                String requestBody1 = "{\"name\": \"" + name.getText() + "\" , \"desc\": \"" + desc.getText() + "\" , \"duration\": \"" + duration.getText() + "\" , \"key\": \"" + key.getText() + "\" , \"sal\": \"" + sal.getText() + "\" , \"id\": " + f.getId() + "  }"; // replace with your login credentials as JSON
+                System.out.println(requestBody1);
+
+                //lb.setText("Welcome : " + email.getText());
+                ConnectionRequest request1 = new ConnectionRequest() {
+                    @Override
+                    protected void readResponse(InputStream input) throws IOException {
+                        JSONParser parser = new JSONParser();
+                        Map<String, Object> response = parser.parseJSON(new InputStreamReader(input));
+                        System.out.println("Response: add offer " + response);
+
+                        new MyOffersForm(theme).show();
+                    }
+
+                    @Override
+                    protected void handleErrorResponseCode(int code, String message) {
+                        System.out.println("Error: " + message);
+                    }
+                };
+                request1.setUrl(url1);
+                request1.setPost(true);
+                request1.setRequestBody(requestBody1);
+                request1.setContentType("application/json");
+                NetworkManager.getInstance().addToQueue(request1);
+
+            });
+
+        });
+        c.add(bntcreate);
+        this.add(c);
     }
 }
