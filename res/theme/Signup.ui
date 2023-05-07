@@ -33,13 +33,7 @@
   <component type="Container" name="Container4" cloudDestinationProperty="Container4" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="4" >
     <component type="Label" name="Label4" cloudDestinationProperty="Label4" text="Password" >
     </component>
-    <component type="TextField" name="password" cloudBoundProperty="text" cloudDestinationProperty="TextField4" text="" >
-    </component>
-  </component>
-  <component type="Container" name="Container5" cloudDestinationProperty="Container5" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="4" >
-    <component type="Label" name="Label5" cloudDestinationProperty="Label5" text="Label" >
-    </component>
-    <component type="TextField" name="TextField5" cloudBoundProperty="text" cloudDestinationProperty="TextField5" text="TextField" >
+    <component type="TextField" name="password" cloudBoundProperty="text" cloudDestinationProperty="TextField4" text="" constraint="65536" >
     </component>
   </component>
   <component type="Container" name="Container6" cloudDestinationProperty="Container6" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="4" >
