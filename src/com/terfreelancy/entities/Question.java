@@ -4,6 +4,7 @@
  */
 package com.terfreelancy.entities;
 
+import com.codename1.ui.ButtonGroup;
 import java.util.Objects;
 
 /**
@@ -158,5 +159,6 @@ public class Question {
     public String toString() {
         return "Question{" + "id_question=" + id_question + ", quest=" + quest + ", choice1=" + choice1 + ", choice2=" + choice2 + ", choice3=" + choice3 + ", response=" + response + '}';
     }
+
     
 }

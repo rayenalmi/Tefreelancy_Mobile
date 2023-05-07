@@ -121,13 +121,16 @@ return resultOK;
         return resultOK;
     }
     public ArrayList<Test> searchTests(String query) {
-        ArrayList<Test> searchResults = new ArrayList<>();
-        for (Test t : tests) {
-            if (t.getName().contains(query) || t.getType().contains(query)) {
-                searchResults.add(t);
-            }
+    ArrayList<Test> searchResults = new ArrayList<>();
+    String lowercaseQuery = query.toLowerCase();
+    for (Test t : tests) {
+        String lowercaseName = t.getName().toLowerCase();
+        String lowercaseType = t.getType().toLowerCase();
+        if (lowercaseName.contains(lowercaseQuery) || lowercaseType.contains(lowercaseQuery)) {
+            searchResults.add(t);
         }
-        return searchResults;
     }
+    return searchResults;
+}
 
 }

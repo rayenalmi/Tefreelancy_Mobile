@@ -10,8 +10,10 @@ import com.codename1.ui.Container;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
+import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
+import com.codename1.ui.util.Resources;
 import com.tefreelancy.services.ServiceQuestion;
 import com.tefreelancy.services.ServiceTest;
 import com.terfreelancy.entities.Question;
@@ -25,43 +27,77 @@ import java.util.ArrayList;
 public class TheTestsForm extends Form {
     private ArrayList<Test> tests;
     private Form current;
+    TextField searchField = new TextField("","chercher un test");
+    Button searchButton = new Button("search");
+    Container testContainer = new Container(BoxLayout.y());
+   public TheTestsForm(Form previous) {
+    setTitle("Liste des tests");
+    setLayout(BoxLayout.y());
 
-    public TheTestsForm(Form previous) {
-        setTitle("Liste des tests"); 
-        setLayout(BoxLayout.y());
-        
+    searchButton.addActionListener(e -> {
+        String query = searchField.getText();
+        performSearch(query, previous, null);
+    });
+    add(searchField);
+    add(searchButton);
 
-        tests = ServiceTest.getInstance().getAllTests();
-        Container list = new Container(BoxLayout.y());
-        list.setScrollableY(true);
-        for (Test test : tests) {
-            Container testContainer = new Container(BoxLayout.y());
-            testContainer.setUIID("TheTestsForm_Container");
+    tests = ServiceTest.getInstance().getAllTests();
 
-            Label nameLabel = new Label("Nom : " + test.getName());
-            Label typeLabel = new Label("Type : " + test.getType());
+    Container list = new Container(BoxLayout.y());
+    list.setScrollable(false); // Set this to false to prevent the test containers from being scrollable
 
-           Button PassButton = new Button("Passer");
-            PassButton.addActionListener((evt) -> {
-                System.out.println(test.getId_test());
-            new InTheTestForm(this,test.getId_test()).show();
-                
-            });
-            
+    for (Test test : tests) {
+        addTestContainer(test, previous, null);
+    }
 
+    list.add(testContainer); // Add the test container to the list container
 
-            Container buttonsContainer = new Container(new GridLayout(1, 2));
-            buttonsContainer.setUIID("TheTestsForm_ButtonsContainer");
-            buttonsContainer.add(PassButton);
+    
+    add(list); // Add the list container to the form
 
-            testContainer.add(nameLabel);
-            testContainer.add(typeLabel);
-            testContainer.add(buttonsContainer);
+    getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
+}
+    private void addTestContainer(Test test, Form previous, Resources theme) {
+        Container testContainer = new Container(BoxLayout.y());
+        testContainer.setUIID("TheTestsForm_Container");
 
-            list.add(testContainer);
-        }
-        this.add(list);
+        Label nameLabel = new Label("Nom : " + test.getName());
+        Label typeLabel = new Label("Type : " + test.getType());
+
+        Button PassButton = new Button("Passer");
+        PassButton.addActionListener((evt) -> {
+            new InTheTestForm(this, test.getId_test()).show();
+        });
+
+        Container buttonsContainer = new Container(new GridLayout(1, 2));
+        buttonsContainer.setUIID("TheTestsForm_ButtonsContainer");
+        buttonsContainer.add(PassButton);
+
+        testContainer.add(nameLabel);
+        testContainer.add(typeLabel);
+        testContainer.add(buttonsContainer);
+
+        this.add(testContainer);
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
-    }    
+    }
+
+    private void performSearch(String query, Form previous, Resources theme) {
+        ArrayList<Test> searchResults = ServiceTest.getInstance().searchTests(query);
+        removeAll();
+        add(searchField);
+        add(searchButton);
+
+        if (searchResults.isEmpty()) {
+            Label noResultsLabel = new Label("No results found");
+            add(noResultsLabel);
+        } else {
+            for (Test t : searchResults) {
+                addTestContainer(t, previous, theme);
+            }
+        }
+
+        revalidate();
+    }
+    
     
 }
