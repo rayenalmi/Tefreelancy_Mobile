@@ -8,6 +8,7 @@ import com.codename1.ui.Button;
 import com.codename1.ui.Command;
 import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
+import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
@@ -29,18 +30,19 @@ public class ListGroupForm extends Form {
     private Form current;
     private TextField searchField;
     private Button searchButton;
+    
 
-    public ListGroupForm(Form previous,Resources theme) {
+    public ListGroupForm(Form previous, Resources theme) {
         current = this;
 
 //        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
         setTitle("List of Groups");
-        searchField = new TextField("", "Search Query");
+        searchField = new TextField("", "Search Groups");
         searchButton = new Button("Search");
 
         searchButton.addActionListener(e -> {
             String query = searchField.getText();
-            performSearch(query, previous,theme);
+            performSearch(query, previous, theme);
         });
 
         add(searchField);
@@ -48,18 +50,18 @@ public class ListGroupForm extends Form {
 
         setLayout(new BoxLayout(BoxLayout.Y_AXIS));
         Button btnAddGroupPost = new Button("Add Group");
-        btnAddGroupPost.addActionListener(e -> new AddGroupForm(current,theme).show());
+        btnAddGroupPost.addActionListener(e -> new AddGroupForm(current, theme).show());
         add(btnAddGroupPost);
 
         ArrayList<Groupe> groups = ServiceGroup.getInstance().getAllGroups();
         for (Groupe group : groups) {
-            addElement(group, previous,theme);
+            addElement(group, previous, theme);
         }
 
         // getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
     }
 
-    private void performSearch(String query, Form previous,Resources theme) {
+    private void performSearch(String query, Form previous, Resources theme) {
         ArrayList<Groupe> searchResults = ServiceGroup.getInstance().searchGroups(query);
         removeAll();
         add(searchField);
@@ -70,16 +72,16 @@ public class ListGroupForm extends Form {
             add(noResultsLabel);
         } else {
             for (Groupe group : searchResults) {
-                addElement(group, previous,theme);
+                addElement(group, previous, theme);
             }
         }
-        //  getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
+        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
 
         revalidate();
 
     }
 
-    public void addElement(Groupe groupe, Form previous,Resources theme) {
+    public void addElement(Groupe groupe, Form previous, Resources theme) {
         Label lblGroupName = new Label(groupe.getNom());
         Label lblDescription = new Label(groupe.getDescription());
 
@@ -89,16 +91,18 @@ public class ListGroupForm extends Form {
             @Override
             public void actionPerformed(ActionEvent evt) {
                 ServiceGroup.getInstance().deleteGroups(groupe.getId());
-                Dialog.show("Group deleted successfully", "OK", null);
+                Dialog.show("Done", "Group deleted successfully", new Command("ok"));
                 previous.showBack();
-                new ListGroupForm(previous,theme).show();
+                new ListGroupForm(previous, theme).show();
             }
         });
         Button btnEditGroup = new Button("Update Group");
-        btnEditGroup.addActionListener(e -> new UpdateGroupForm(current, groupe,theme).show());
+        btnEditGroup.addActionListener(e -> new UpdateGroupForm(current, groupe, theme).show());
 
         Button btnShowGroupPosts = new Button("Show Group Posts");
-        btnShowGroupPosts.addActionListener(e -> new ListGroupPost(current, groupe,theme).show());
+        btnShowGroupPosts.addActionListener(e -> new ListGroupPost(current, groupe, theme).show());
         addAll(lblGroupName, lblDescription, btnDeleteGroup, btnEditGroup, btnShowGroupPosts);
+
     }
+
 }
