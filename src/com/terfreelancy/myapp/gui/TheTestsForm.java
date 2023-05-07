@@ -63,4 +63,5 @@ public class TheTestsForm extends Form {
         this.add(list);
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
     }    
+    
 }

@@ -120,5 +120,14 @@ return resultOK;
         NetworkManager.getInstance().addToQueueAndWait(req);
         return resultOK;
     }
+    public ArrayList<Test> searchTests(String query) {
+        ArrayList<Test> searchResults = new ArrayList<>();
+        for (Test t : tests) {
+            if (t.getName().contains(query) || t.getType().contains(query)) {
+                searchResults.add(t);
+            }
+        }
+        return searchResults;
+    }
 
 }
