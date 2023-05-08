@@ -129,8 +129,8 @@ public class LoginForm extends Form {
                             Label name = new Label(users.get(i).getPrenom() + " " + users.get(i).getNom());
                             Button show = new Button("Show");
                             Button delete = new Button("Delete");
-                            Freelancer f = users.get(i) ; 
-                            int index = i ;
+                            Freelancer f = users.get(i);
+                            int index = i;
                             delete.addActionListener(er -> {
 
                                 String url = "http://127.0.0.1:8000/user/deleteUser"; // replace with your API URL
@@ -160,7 +160,7 @@ public class LoginForm extends Form {
                                 request.setRequestBody(requestBody);
                                 request.setContentType("application/json");
                                 NetworkManager.getInstance().addToQueue(request);
-                               adminI.refreshTheme(); 
+                                adminI.refreshTheme();
                             });
 
                             show.addActionListener(er -> {
@@ -258,6 +258,13 @@ public class LoginForm extends Form {
 
         });
 
+        Button addFormation = new Button("Add Formation");
+        
+        addFormation.addActionListener(l -> {
+        //Container c = uIBuilder1.createContainer(theme, "Login");
+        } );
+        
+        this.add(addFormation);
         this.add(c);
 
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <resource majorVersion="1" minorVersion="11" useXmlUI="false">
+    <ui name="AddFormation" />
     <ui name="AdminUser" />
     <image name="back-command.png" type="multi"  />
     <image name="border.png"  />

@@ -10,8 +10,10 @@ import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Button;
+import com.codename1.ui.Component;
 import com.codename1.ui.Container;
 import com.codename1.ui.EncodedImage;
+import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.Image;
@@ -20,6 +22,7 @@ import com.codename1.ui.URLImage;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.GridLayout;
+import com.codename1.ui.plaf.Border;
 import com.codename1.ui.util.Resources;
 import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Formation;
@@ -173,7 +176,7 @@ public class FavorisForm extends Form {
 
                     Form chaptersFrom = new Form(new BoxLayout(BoxLayout.Y_AXIS));
 
-                    chaptersFrom.setTitle("My Form");
+                    chaptersFrom.setTitle("Chapters");
 
                     for (int i = 0; i < chaptersJSON.size(); i++) {
                         Map<String, Object> jsonObject = (Map<String, Object>) chaptersJSON.get(i);
@@ -186,6 +189,12 @@ public class FavorisForm extends Form {
 
                         // Create a label for the context
                         SpanLabel contextLabel = new SpanLabel((String) jsonObject.get("context"));
+                        contextLabel.getAllStyles().setFont(Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_PLAIN, Font.SIZE_MEDIUM));
+                        contextLabel.getAllStyles().setFgColor(0x0000ff);
+                        contextLabel.getAllStyles().setPadding(5, 5, 5, 5);
+                        contextLabel.getAllStyles().setMargin(2, 2, 2, 2);
+                        contextLabel.getAllStyles().setBorder(Border.createLineBorder(1, 0x0000ff));
+                        contextLabel.getStyle().setAlignment(Component.CENTER);
 
                         // Load the image using HTTPS
                         String imageUrl = "https://eastgateacademy.ca/wp-content/uploads/2021/12/Learning.jpg";

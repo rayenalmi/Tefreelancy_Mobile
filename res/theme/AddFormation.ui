@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<component type="Form" name="AddFormation" cloudDestinationProperty="AddFormation" layout="BoxLayout" boxLayoutAxis="Y" >
+  <component type="Container" name="Container" cloudDestinationProperty="Container" >
+    <component type="Label" name="Label" cloudDestinationProperty="Label" text="Name" >
+    </component>
+    <component type="TextField" name="name" cloudBoundProperty="text" cloudDestinationProperty="name" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container1" cloudDestinationProperty="Container1" >
+    <component type="Label" name="Label1" cloudDestinationProperty="Label1" text="Number of Hours" >
+    </component>
+    <component type="TextField" name="nbh" cloudBoundProperty="text" cloudDestinationProperty="nbh" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container2" cloudDestinationProperty="Container2" >
+    <component type="Label" name="Label2" cloudDestinationProperty="Label2" text="Number of lesson" >
+    </component>
+    <component type="TextField" name="nbl" cloudBoundProperty="text" cloudDestinationProperty="nbl" text="" >
+    </component>
+  </component>
+  <component type="Container" name="Container3" cloudDestinationProperty="Container3" layout="FlowLayout" flowLayoutFillRows="false" flowLayoutAlign="4" flowLayoutValign="4" >
+    <component type="Button" name="add" cloudDestinationProperty="add" text="Add" >
+    </component>
+  </component>
+</component>
