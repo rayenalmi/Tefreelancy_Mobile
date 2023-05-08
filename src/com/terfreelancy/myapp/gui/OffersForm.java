@@ -10,6 +10,7 @@ import com.codename1.io.NetworkManager;
 import com.codename1.ui.Container;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
+import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.util.Resources;
 import com.tefreelancy.utils.SessionManager;
@@ -21,15 +22,15 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-
+import com.codename1.ui.Button;
 /**
  *
  * @author ROG
  */
 public class OffersForm extends Form {
-
     public OffersForm(Resources theme) {
-        //getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f.show());
+    // Add toolbar commands
+    //getToolbar().addCommandToLeftSideMenu("Home", null, ev -> f.show());
         getToolbar().addCommandToLeftSideMenu("Offers", null, ev -> new OffersForm(theme).show());
         getToolbar().addCommandToLeftSideMenu("My Offers", null, ev -> new MyOffersForm(theme).show());
         getToolbar().addCommandToLeftSideMenu("Candidacy", null, ev -> new CandidacyForm(theme).show());
@@ -41,60 +42,101 @@ public class OffersForm extends Form {
         getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> new ProfilForm(theme).show());
         getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> this.show());
 
-        ArrayList<Offre> offres = new ArrayList<>();
+    setTitle("Offers");
+    Container c = new Container(new BoxLayout(BoxLayout.Y_AXIS));
 
-        setTitle("Offers");
-        Container c = new Container(new BoxLayout(BoxLayout.Y_AXIS));
+    TextField searchField = new TextField("", "Search");
+    Button searchButton = new Button("Search");
+    c.add(searchField);
+    c.add(searchButton);
 
-        String url = "http://127.0.0.1:8000/start/offer/getoffersmobile";
+    ArrayList<Offre> allOffers = new ArrayList<>();
+    ArrayList<Offre> filteredOffers = new ArrayList<>();
 
-        ConnectionRequest request = new ConnectionRequest() {
-            @Override
-            protected void readResponse(InputStream input) throws IOException {
-                JSONParser parser = new JSONParser();
-                Map<String, Object> response = parser.parseJSON(new InputStreamReader(input));
-                System.out.println("Response: " + response);
-                Object successValue = response.get("root");
-                System.out.println("Success value: " + successValue);
-                ArrayList<Object> offreJSON = new ArrayList<>();
-                offreJSON = new ArrayList<>((Collection<? extends Object>) successValue);
+    String url = "http://127.0.0.1:8000/start/offer/getoffersmobile";
 
-                //Offre o = new Offre(id, (String) jsonObject.get("name"), (String) jsonObject.get("decs"), (String) jsonObject.get("duration"), (String) jsonObject.get("keyword"),salaire , id_recruter);
-                for (int i = 0; i < offreJSON.size(); i++) {
-                    Map<String, Object> jsonObject = (Map<String, Object>) offreJSON.get(i);
-                    Object idd = jsonObject.get("id");
-                    double d = (double) idd;
-                    int id = (int) d;
+    // Fetch all offers from server
+    ConnectionRequest request = new ConnectionRequest() {
+        @Override
+        protected void readResponse(InputStream input) throws IOException {
+            JSONParser parser = new JSONParser();
+            Map<String, Object> response = parser.parseJSON(new InputStreamReader(input));
+            Object successValue = response.get("root");
+            ArrayList<Object> offreJSON = new ArrayList<>();
+            offreJSON = new ArrayList<>((Collection<? extends Object>) successValue);
 
-                    Object salJ = jsonObject.get("salaire");
-                    double dsal = (double) salJ;
-                    float salaire = (float) dsal;
+            for (int i = 0; i < offreJSON.size(); i++) {
+                Map<String, Object> jsonObject = (Map<String, Object>) offreJSON.get(i);
+                Object idd = jsonObject.get("id");
+                double d = (double) idd;
+                int id = (int) d;
 
-                    Object idrecJ = jsonObject.get("idrec");
-                    double idrec = (double) idrecJ;
-                    int id_recruter = (int) idrec;
+                Object salJ = jsonObject.get("salaire");
+                double dsal = (double) salJ;
+                float salaire = (float) dsal;
 
-                    offres.add(new Offre(id, (String) jsonObject.get("name"), (String) jsonObject.get("decs"), (String) jsonObject.get("duration"), (String) jsonObject.get("keyword"), salaire, id_recruter));
-                }
+                Object idrecJ = jsonObject.get("idrec");
+                double idrec = (double) idrecJ;
+                int id_recruter = (int) idrec;
 
-                for (int i = 0; i < offres.size(); i++) {
-                    c.add(new Label(offres.get(i).getNom()));
-                }
-                refreshTheme();
-
+                allOffers.add(new Offre(id, (String) jsonObject.get("name"), (String) jsonObject.get("decs"), (String) jsonObject.get("duration"), (String) jsonObject.get("keyword"), salaire, id_recruter));
             }
 
-            @Override
-            protected void handleErrorResponseCode(int code, String message) {
-                System.out.println("Error: " + message);
+            filteredOffers.addAll(allOffers);
+            displayOffers(c, filteredOffers);
+        }
+
+        @Override
+        protected void handleErrorResponseCode(int code, String message) {
+            System.out.println("Error: " + message);
+        }
+    };
+    request.setUrl(url);
+    request.setPost(false);
+    request.setContentType("application/json");
+    NetworkManager.getInstance().addToQueue(request);
+
+    // Add search functionality
+    searchButton.addActionListener(e -> {
+        String keyword = searchField.getText().toLowerCase();
+        filteredOffers.clear();
+        for (Offre offer : allOffers) {
+            if (offer.getMotsCles().toLowerCase().contains(keyword)) {
+                filteredOffers.add(offer);
             }
-        };
-        request.setUrl(url);
-        request.setPost(false);
-        request.setContentType("application/json");
-        NetworkManager.getInstance().addToQueue(request);
+        }
+        displayOffers(c, filteredOffers);
+    });
 
-        this.add(c);
-
-    }
+    this.add(c);
 }
+
+private void displayOffers(Container container, ArrayList<Offre> offers) {
+    container.removeAll();
+    for (Offre offre : offers) {
+        container.add(new Label(offre.getNom()));
+    }
+    // Add search functionality
+    TextField searchField = new TextField("", "Search");
+    Button searchButton = new Button("Search");
+    container.add(searchField);
+    container.add(searchButton);
+
+    searchButton.addActionListener(e -> {
+        String keyword = searchField.getText().toLowerCase();
+        ArrayList<Offre> filteredOffers = new ArrayList<>();
+        for (Offre offer : offers) {
+            if (offer.getMotsCles().toLowerCase().contains(keyword)) {
+                filteredOffers.add(offer);
+            }
+        }
+        displayOffers(container, filteredOffers);
+    });
+
+    refreshTheme();
+}
+
+}
+
+
+   

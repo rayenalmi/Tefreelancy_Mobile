@@ -5,17 +5,23 @@
 package com.terfreelancy.myapp.gui;
 
 import com.codename1.io.ConnectionRequest;
+import com.codename1.io.FileSystemStorage;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkManager;
 import com.codename1.ui.Button;
+import com.codename1.ui.Command;
 import com.codename1.ui.Container;
 import com.codename1.ui.Dialog;
+import com.codename1.ui.Display;
+import com.codename1.ui.Font;
 import com.codename1.ui.Form;
 import com.codename1.ui.Label;
 import com.codename1.ui.TextField;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.util.Resources;
 import com.codename1.ui.util.UIBuilder;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Freelancer;
 import com.terfreelancy.entities.Offre;
@@ -25,6 +31,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import com.itextpdf.text.pdf.PdfPTable;
+import java.io.OutputStream;
 
 /**
  *
@@ -32,8 +48,10 @@ import java.util.Map;
  */
 public class MyOffersForm extends Form {
 
+    public ArrayList<Offre> offres = new ArrayList<>();
+
     public MyOffersForm(Resources theme) {
-        ArrayList<Offre> offres = new ArrayList<>();
+        offres = new ArrayList<>();
 
         SessionManager session = SessionManager.getInstance();
         Freelancer f = session.getCurrentUser();
@@ -87,8 +105,63 @@ public class MyOffersForm extends Form {
                 }
 
                 for (int i = 0; i < offres.size(); i++) {
-                    Container c3 = new Container(new BoxLayout(BoxLayout.X_AXIS));
+                    Container c3 = new Container(new BoxLayout(BoxLayout.Y_AXIS));
                     c3.add(new Label(offres.get(i).getNom()));
+                    c3.add(new Label(offres.get(i).getDescription()));
+                    c3.add(new Label(offres.get(i).getDuree()));
+                    c3.add(new Label(offres.get(i).getMotsCles()));
+                    c3.add(new Label(Float.toString(offres.get(i).getSalaire())));
+                    /////////////////////////
+                    Button pdfBtn = new Button("Download PDF");
+                    pdfBtn.getStyle().setMarginBottom(5);
+                    pdfBtn.getAllStyles().setBgColor(0x00FF00);
+                    pdfBtn.addActionListener(e -> {
+                        try {
+                            downloadPDF();
+                        } catch (Exception ex) {
+                            Dialog.show("ERROR", "PDF download failed", new Command("OK"));
+                        }
+                    });
+
+                    c3.add(pdfBtn); // Add the button to the form
+
+                    /////////////////////////
+                    // Add create PDF button
+                    //Button createPDFButton = new Button("Create PDF");
+                    //createPDFButton.getStyle().setMarginBottom(5);
+                    //createPDFButton.getAllStyles().setBgColor(0x00FF00); // set button background color to green
+                    //c3.add(createPDFButton);
+                    // Generate PDF when button is clicked
+                    /*createPDFButton.addActionListener((evt) -> {
+
+                        // Generate PDF code goes here
+                        try {
+                            // Create a new PDF document
+                            Document document = new Document();
+
+                            // Create a new PDF writer
+                            PdfWriter.getInstance(document, new FileOutputStream("offer.pdf"));
+
+                            // Open the document
+                            document.open();
+                            List<Offre> offresCopy = offres; // Make a copy of the original list
+                            for (Offre offre : offresCopy) {
+                                Paragraph nameParagraph = new Paragraph("Name: " + offre.getNom());
+                                document.add(nameParagraph);
+                                // Add other offer details here
+                            }
+
+                            
+                            document.close();
+
+                            // Show success message to the user
+                            Dialog.show("PDF Generated", "PDF file offer_details.pdf has been generated", "OK", null);
+                        } catch (FileNotFoundException | DocumentException e) {
+                            // Show error message to the user if PDF generation fails
+                            Dialog.show("PDF Error", "An error occurred while generating PDF", "OK", null);
+                            e.printStackTrace();
+                        }
+                    });*/
                     c3.add(new Button("Update"));
                     Button btnDelete = new Button("Delete");
                     int id = offres.get(i).getId_offre();
@@ -196,4 +269,66 @@ public class MyOffersForm extends Form {
         NetworkManager.getInstance().addToQueue(request);
         //fr.refreshTheme();
     }
+
+    public void downloadPDF() throws IOException, DocumentException {
+        String filePath = FileSystemStorage.getInstance().getAppHomePath() + "offre.pdf";
+        OutputStream outputStream = FileSystemStorage.getInstance().openOutputStream(filePath);
+
+        Document document = new Document();
+        PdfWriter.getInstance(document, outputStream);
+        document.open();
+
+        // Define font styles
+        com.itextpdf.text.Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.BLACK);
+        com.itextpdf.text.Font tableHeaderFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
+        com.itextpdf.text.Font tableCellFont = FontFactory.getFont(FontFactory.HELVETICA, 10, BaseColor.BLACK);
+
+        // Add title
+        Paragraph title = new Paragraph("List of job offers", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
+
+        // Add empty line
+        document.add(Chunk.NEWLINE);
+
+        // Add table
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        table.setSpacingBefore(10f);
+        table.setSpacingAfter(10f);
+
+        // Add table headers
+        PdfPCell cell1 = new PdfPCell(new Paragraph("Title", tableHeaderFont));
+        PdfPCell cell2 = new PdfPCell(new Paragraph("Description", tableHeaderFont));
+        PdfPCell cell3 = new PdfPCell(new Paragraph("Duration", tableHeaderFont));
+        PdfPCell cell4 = new PdfPCell(new Paragraph("Keywords", tableHeaderFont));
+        PdfPCell cell5 = new PdfPCell(new Paragraph("Salary", tableHeaderFont));
+
+        table.addCell(cell1);
+        table.addCell(cell2);
+        table.addCell(cell3);
+        table.addCell(cell4);
+        table.addCell(cell5);
+
+        // Add table data
+        for (Offre offre : offres) {
+            table.addCell(new Paragraph(offre.getNom(), tableCellFont));
+            table.addCell(new Paragraph(offre.getDescription(), tableCellFont));
+            table.addCell(new Paragraph(offre.getDuree(), tableCellFont));
+            table.addCell(new Paragraph(offre.getMotsCles(), tableCellFont));
+            table.addCell(new Paragraph(Float.toString(offre.getSalaire()), tableCellFont));
+        }
+
+        document.add(table);
+
+        // Close document
+        document.close();
+        outputStream.flush();
+        outputStream.close();
+
+        if (Dialog.show("PDF Downloaded", "PDF file was saved to " + filePath + ". Do you want to open it?", "Open", "Cancel")) {
+            Display.getInstance().execute(filePath);
+        }
+    }
+
 }
