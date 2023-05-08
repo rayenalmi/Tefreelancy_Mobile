@@ -34,8 +34,12 @@ import com.tefreelancy.utils.SessionManager;
 import com.terfreelancy.entities.Freelancer;
 import com.terfreelancy.myapp.gui.GroupsForm;
 import com.terfreelancy.myapp.gui.HomeForm;
+import com.terfreelancy.myapp.gui.HomePortfolio;
+import com.terfreelancy.myapp.gui.ListCrud;
 import com.terfreelancy.myapp.gui.ListGroupForm;
+import com.terfreelancy.myapp.gui.ListWorkspacesForm;
 import com.terfreelancy.myapp.gui.LoginForm;
+import com.terfreelancy.myapp.gui.TheTestsForm;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -70,7 +74,9 @@ public class MyApplication {
                 Log.e(err.getError());
             }
             Log.sendLogAsync();
-            Dialog.show("Connection Error", "There was a networking error in the connection to " + err.getConnectionRequest().getUrl(), "OK", null);
+            Dialog.show("Connection Error",
+                    "There was a networking error in the connection to " + err.getConnectionRequest().getUrl(), "OK",
+                    null);
         });
     }
 
@@ -78,10 +84,28 @@ public class MyApplication {
         LoginForm loginForm = new LoginForm(theme);
         // Show the login form on the screen
         Button btnListGroups = new Button("List Groups");
-        btnListGroups.addActionListener(e -> new ListGroupForm(current,theme).show());
-        loginForm.add(btnListGroups);
-        loginForm.show();
+        btnListGroups.addActionListener(e -> new ListGroupForm(current, theme).show());
+        Button BtnListCrud = new Button("ListCrud");
+        BtnListCrud.addActionListener(e -> new ListCrud(current).show());
+        Button BtnListTests = new Button("les tests dispo");
+        BtnListTests.addActionListener(e -> new TheTestsForm(current).show());
+        Button BtnGoProfile= new Button("Check your Profile");
+        BtnGoProfile.addActionListener(e-> new HomePortfolio(current).show());
 
+
+
+        loginForm.add(BtnGoProfile);
+        loginForm.add(btnListGroups);
+        loginForm.add(BtnListCrud);
+        loginForm.add(BtnListTests);
+        Button btnListWorkspaces = new Button("Workspace");
+        String userRole="Recruter";
+        btnListWorkspaces.addActionListener(e-> new ListWorkspacesForm(current,12,userRole).show());
+        
+        loginForm.add(btnListWorkspaces);
+        
+
+        loginForm.show();
 
     }
 

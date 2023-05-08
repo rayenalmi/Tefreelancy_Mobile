@@ -67,6 +67,10 @@ public class Freelancer {
         this.prenom = prenom;
     }
 
+    public Freelancer() {
+    }
+
+  
     public int getId() {
         return id;
     }
