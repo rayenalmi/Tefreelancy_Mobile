@@ -62,7 +62,7 @@ public class LoginForm extends Form {
         TextField password = (TextField) uIBuilder.findByName("password", c);
         Button loginbtn = (Button) uIBuilder.findByName("login", c);
         Button signupbtn = (Button) uIBuilder.findByName("signup", c);
-        
+
         signupbtn.addActionListener(er -> {
             new SignupForm(theme).show();
         });
@@ -77,14 +77,13 @@ public class LoginForm extends Form {
         f.getToolbar().addCommandToLeftSideMenu("Workspace", null, ev -> new WorkspaceForm(theme).show());
         f.getToolbar().addCommandToLeftSideMenu("Profil", null, ev -> new ProfilForm(theme).show());
         f.getToolbar().addCommandToLeftSideMenu("Logout", null, ev -> f.show());*/
-
         loginbtn.addActionListener(er -> {
             AdminUserFrom adminI = new AdminUserFrom(theme);
-            
+
             adminI.getToolbar().addCommandToLeftBar("Back", null, (ActionListener) (ActionEvent evt) -> {
-            this.showBack();
-        });
-            
+                new LoginForm(theme).showBack();
+            });
+
             System.out.println(email.getText() + " " + password.getText());
             if (email.getText().equals("admin") && password.getText().equals("admin")) {
 
@@ -124,11 +123,74 @@ public class LoginForm extends Form {
                         for (int i = 0; i < users.size(); i++) {
 
                             //Label lb = new Label(users.get(i).getEmail());
-                            adminI.add(designOneUser(users.get(i), adminI));
+                            //adminI.add(designOneUser(users.get(i), adminI, theme));
+                            Container C2 = new Container(new BoxLayout(BoxLayout.X_AXIS));
+                            Label email = new Label(users.get(i).getEmail());
+                            Label name = new Label(users.get(i).getPrenom() + " " + users.get(i).getNom());
+                            Button show = new Button("Show");
+                            Button delete = new Button("Delete");
+                            Freelancer f = users.get(i) ; 
+                            int index = i ;
+                            delete.addActionListener(er -> {
+
+                                String url = "http://127.0.0.1:8000/user/deleteUser"; // replace with your API URL
+                                String requestBody = "{\"id\": " + f.getId() + " }"; // replace with your login credentials as JSON
+                                System.out.println(requestBody);
+
+                                ConnectionRequest request = new ConnectionRequest() {
+                                    @Override
+                                    protected void readResponse(InputStream input) throws IOException {
+                                        JSONParser parser = new JSONParser();
+                                        Map<String, Object> response = parser.parseJSON(new InputStreamReader(input));
+                                        System.out.println("Response: " + response);
+                                        Object successValue = response.get("succes");
+                                        System.out.println("Success value: " + successValue);
+                                        users.remove(index);
+                                        adminI.refreshTheme();
+
+                                    }
+
+                                    @Override
+                                    protected void handleErrorResponseCode(int code, String message) {
+                                        System.out.println("Error: " + message);
+                                    }
+                                };
+                                request.setUrl(url);
+                                request.setPost(true);
+                                request.setRequestBody(requestBody);
+                                request.setContentType("application/json");
+                                NetworkManager.getInstance().addToQueue(request);
+                               adminI.refreshTheme(); 
+                            });
+
+                            show.addActionListener(er -> {
+                                Form f2 = new Form("Details", BoxLayout.y());
+                                Label nom = new Label("nom : " + f.getNom());
+                                Label prenom = new Label("prenom : " + f.getPrenom());
+                                Label xemail = new Label("Email : " + f.getEmail());
+                                Label role = new Label("Role : Freelancer ");
+
+                                f2.add(nom);
+                                f2.add(prenom);
+                                f2.add(xemail);
+                                f2.add(role);
+
+                                f2.getToolbar().addCommandToLeftBar("Back", null, ev -> new LoginForm(theme).show());
+                                f2.show();
+                            });
+
+                            name.addPointerPressedListener((ActionListener) (ActionEvent evt) -> {
+                                Dialog.show("User", "Nom : " + f.getNom() + " \n Tel : " + f.getTel(), "Ok", null);
+                            });
+
+                            C2.add(email);
+                            C2.add(show);
+                            C2.add(delete);
+                            adminI.add(C2);
                             adminI.refreshTheme();
                         }
-                        adminI.add(createFormationCard("Java", 12, 30, "https://thumbs.dreamstime.com/b/banni%C3%A8re-plate-de-web-style-conception-pour-le-chemin-au-succ%C3%A8s-niveaux-d-enseignement-formation-du-personnel-sp%C3%A9cialisation-102229928.jpg"));
-                        adminI.add(createFormationCard("Java", 12, 30, "https://thumbs.dreamstime.com/b/banni%C3%A8re-plate-de-web-style-conception-pour-le-chemin-au-succ%C3%A8s-niveaux-d-enseignement-formation-du-personnel-sp%C3%A9cialisation-102229928.jpg"));
+                        //adminI.add(createFormationCard("Java", 12, 30, "https://thumbs.dreamstime.com/b/banni%C3%A8re-plate-de-web-style-conception-pour-le-chemin-au-succ%C3%A8s-niveaux-d-enseignement-formation-du-personnel-sp%C3%A9cialisation-102229928.jpg"));
+                        //adminI.add(createFormationCard("Java", 12, 30, "https://thumbs.dreamstime.com/b/banni%C3%A8re-plate-de-web-style-conception-pour-le-chemin-au-succ%C3%A8s-niveaux-d-enseignement-formation-du-personnel-sp%C3%A9cialisation-102229928.jpg"));
 
                         adminI.refreshTheme();
 
@@ -205,7 +267,7 @@ public class LoginForm extends Form {
         loginForm.show();
     }
 
-    public Container designOneUser(Freelancer f, Form fr) {
+    public Container designOneUser(Freelancer f, Form fr, Resources theme) {
         Container C2 = new Container(new BoxLayout(BoxLayout.X_AXIS));
         Label email = new Label(f.getEmail());
         Label name = new Label(f.getPrenom() + " " + f.getNom());
@@ -226,6 +288,7 @@ public class LoginForm extends Form {
                     System.out.println("Response: " + response);
                     Object successValue = response.get("succes");
                     System.out.println("Success value: " + successValue);
+                    fr.refreshTheme();
 
                 }
 
@@ -254,7 +317,7 @@ public class LoginForm extends Form {
             f2.add(xemail);
             f2.add(role);
 
-            f2.getToolbar().addCommandToLeftBar("Back", null, ev -> fr.show());
+            f2.getToolbar().addCommandToLeftBar("Back", null, ev -> new LoginForm(theme).show());
             f2.show();
         });
 
